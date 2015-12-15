@@ -18,7 +18,8 @@ var config = {
   },
   mandrill: {
     user: process.env.MANDRILL_USER || 'example@gmail.com',
-    password: process.env.MANDRILL_PASSWORD || 'PUT YOUR MANDRILL PASSWORD HERE'
+    password: process.env.MANDRILL_PASSWORD || 'PUT YOUR MANDRILL PASSWORD HERE',
+    emailFromAddress: 'example@gmail.com'
   }
 };
 

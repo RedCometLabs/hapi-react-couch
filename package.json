@@ -3,6 +3,10 @@
   "description": "Hapi-React-Couch",
   "version": "0.0.1",
   "author": "Garrren Smith <garren.smith@gmail.com>",
+  "contributors": [{
+    "name": "Andrew Bestbier",
+    "email": "andrew@redcometlabs.com"
+  }],
   "main": "server.js",
   "engines": {
     "node": ">0.10.x"
@@ -77,5 +81,6 @@
     "sinon-chai": "~2.8.0",
     "webpack": "~1.12.3",
     "webpack-dev-server": "~1.14.0"
-  }
+  },
+  "license": "MIT"
 }

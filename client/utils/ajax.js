@@ -6,14 +6,14 @@
 import config from '../../config';
 const baseUrl = 'http://' + config.app.host + ':' + config.app.port + '/';
 
-export function spectrePost(url, body) {
+export function Post(url, body) {
   return request('post', url, body)
    .then(function(response) {
      return response.json();
    });
 }
 
-export function spectreGet(url) {
+export function Get(url) {
   return request('get', url, null);
 }
 

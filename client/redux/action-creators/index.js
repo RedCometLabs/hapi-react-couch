@@ -1,4 +1,4 @@
-import {spectrePost, spectreGet} from '../../utils/spectreFetch.js';
+import {Post, Get} from '../../utils/ajax.js';
 
 /* Example Redux Action */
 export function exampleAction() {
@@ -10,7 +10,7 @@ export function exampleAction() {
 /* Example of a AJAX Post through Redux */
 export function loginSubmitted(userData) {
   return function(dispatch) {
-    spectrePost('login', userData)
+    Post('login', userData)
     .then(function(data){
       dispatch(userLoggedIn(data));
     })
@@ -23,7 +23,7 @@ export function loginSubmitted(userData) {
 /* Example of a AJAX Get through Redux */
 export function logout() {
   return function(dispatch) {
-    spectreGet('logout')
+    Get('logout')
       .then(function(response) {
         dispatch(userLogoutSuceeded());
       }).catch(function(ex) {
