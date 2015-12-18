@@ -6,14 +6,14 @@
 import config from '../../config';
 const baseUrl = 'http://' + config.app.host + ':' + config.app.port + '/';
 
-export function Post(url, body) {
+export function post(url, body) {
   return request('post', url, body)
    .then(function(response) {
      return response.json();
    });
 }
 
-export function Get(url) {
+export function get(url) {
   return request('get', url, null);
 }
 

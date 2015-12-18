@@ -1,35 +1,98 @@
-import {Post, Get} from '../../utils/ajax.js';
+import {post, get} from '../../utils/ajax.js';
 
-/* Example Redux Action */
-export function exampleAction() {
-  return {
-    type: 'EXAMPLE_ACTION'
-  };
-}
-
-/* Example of a AJAX Post through Redux */
 export function loginSubmitted(userData) {
   return function(dispatch) {
-    Post('login', userData)
+    post('login', userData)
     .then(function(data){
       dispatch(userLoggedIn(data));
     })
     .catch(function(ex) {
-      alert('Sorry! Those login details are incorrect.');
+      dispatch(applicationError('Sorry! Those login details are incorrect.'));
     })
   }
 }
 
-/* Example of a AJAX Get through Redux */
+export function resetUserPassword(userData) {
+  return function(dispatch) {
+    post('reset-password', userData)
+    .then(function(data){
+      dispatch(userLoggedIn(data));
+    })
+    .catch(function(ex) {
+      dispatch(applicationError('Sorry! There was an error in resetting your password'));
+    })
+  }
+}
+
+export function forgotPassword(email) {
+  return function(dispatch) {
+    post('forgot', email)
+    .then(response => {
+      dispatch(applicationInfo('Check your emails for details on how to reset your Account'));
+    }).catch(ex => {
+      dispatch(applicationError('An account with that email address does not exist'));
+    });
+  }
+}
+
+export function registerUser(userData) {
+  return function(dispatch) {
+    post('signup', userData)
+    .then(function(data) {
+      dispatch(userLoggedIn(data));
+    }).catch(function(ex) {
+      dispatch(applicationError('Sorry! Your sign up failed'));
+    })
+  }
+}
+
+export function checkUserSession() {
+  return function(dispatch) {
+    get('session')
+      .then(function(data) {
+        dispatch(userLoggedIn(data));
+      }).catch(function(ex) {
+        console.log(ex);
+      });
+  };
+}
+
 export function logout() {
   return function(dispatch) {
-    Get('logout')
+    get('logout')
       .then(function(response) {
         dispatch(userLogoutSuceeded());
       }).catch(function(ex) {
-        alert('Sorry! Logging out failed');
+        dispatch(applicationError('Sorry! Logging out failed'));
       })
   };
+}
+
+export function updateUserDetails(newUserDetails) {
+  return function(dispatch) {
+    post('update-user', newUserDetails)
+    .then(function(data) {
+      dispatch(userUpdated(newUserDetails));
+    }).catch(function(ex) {
+      console.log(ex);
+      dispatch(applicationError('Sorry! We could not update your account details'));
+    })
+  }
+}
+
+
+
+
+export function clearErrors() {
+    return {
+      type: 'CLEAR_ERRORS'
+    };
+}
+
+export function clearInfo(){
+  return {
+    type: 'CLEAR_INFO'
+  }
 }
 
 function userLoggedIn(data) {
@@ -42,5 +105,26 @@ function userLoggedIn(data) {
 function userLogoutSuceeded() {
   return {
     type: 'USER_LOGOUT_SUCCEEDED'
+  };
+}
+
+function applicationError(error) {
+  return {
+    type: 'APPLICATION_ERROR',
+    data: error
+  };
+}
+
+function applicationInfo(info) {
+  return {
+    type: 'APPLICATION_INFO',
+    data: info
+  };
+}
+
+function userUpdated(user) {
+  return {
+    type: 'USER_UPDATED',
+    data: user
   };
 }

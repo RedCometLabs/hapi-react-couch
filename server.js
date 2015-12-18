@@ -7,16 +7,16 @@ var server = new Hapi.Server();
 
 // Setup the server with a host and port
 server.connection({
-    port: config.app.port,
-    host: '0.0.0.0',
-    router: {
-        stripTrailingSlash: true
-    },
-    routes: {
-      cors: {
-        origin: ['*']
-      }
+  port: config.app.port,
+  host: '0.0.0.0',
+  router: {
+    stripTrailingSlash: true
+  },
+  routes: {
+    cors: {
+      origin: ['*']
     }
+  }
 });
 
 /*

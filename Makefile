@@ -35,10 +35,13 @@ server:
 	NODE_ENV=development node server.js
 
 client:
-	webpack-dev-server
+	webpack-dev-server --config ./webpack.config.dev.js
 
 index.html:
 	cp ./assets/index.html ./dist/index.html
 
-prod: clean setup less index.html
+setupdb:
+	npm run setupdb
+
+prod: clean setup less index.html setupdb
 	webpack --colors --debug --progress --config ./webpack.config.prod.js

@@ -7,8 +7,8 @@ describe('Auth login', () => {
     return helpers.setup();
   });
 
-  it('respond wrong password', () => {
-    return server.inject({
+  it('respond wrong password', done => {
+    server.inject({
       method: 'POST',
       url: '/login',
       payload: {
@@ -17,12 +17,13 @@ describe('Auth login', () => {
       }
     }, function (res) {
       assert.deepEqual(res.statusCode, 401);
+      done();
     });
   });
 
 
-  it('login with correct credentials works', () => {
-    return server.inject({
+  it('login with correct credentials works', done => {
+    server.inject({
       method: 'POST',
       url: '/login',
       payload: {
@@ -31,6 +32,7 @@ describe('Auth login', () => {
       }
     }, function (res) {
       assert.deepEqual(res.statusCode, 200);
+      done();
     });
   });
 });
@@ -42,9 +44,9 @@ describe('Auth sign up', () => {
     return helpers.setup();
   });
 
-  it('signs up user with correct credentials', () => {
+  it('signs up user with correct credentials', done => {
 
-    return server.inject({
+    server.inject({
       method: 'POST',
       url: '/signup',
       payload: {
@@ -59,10 +61,36 @@ describe('Auth sign up', () => {
 
       assert.deepEqual(returnedUser.user.name, 'Garren');
       assert.deepEqual(returnedUser.user.email, 'garren@newuser.com');
+      done();
     });
   });
 
-  it('sends error for incorrect email', () => {
+  it('sesson works after sign up', done => {
+    const user = {
+      name: 'Garren',
+      email: 'garren2@newuser.com',
+      password: 'new-password'
+    };
+
+    server.inject({
+      method: 'POST',
+      url: '/signup',
+      payload: user
+    }, () => {
+      server.inject({
+        method: 'GET',
+        url: '/session',
+        credentials: user
+      }, res => {
+        assert.deepEqual(res.statusCode, 200);
+        assert.ok(/Successful/.test(res.payload));
+
+        done();
+      });
+    });
+  });
+
+  it('sends error for incorrect email', done => {
     return server.inject({
       method: 'POST',
       url: '/signup',
@@ -74,10 +102,11 @@ describe('Auth sign up', () => {
     }, res => {
       assert.deepEqual(res.statusCode, 400);
       assert.ok(/must be a valid email/.test(JSON.parse(res.payload).message));
+      done();
     });
   });
 
-  it('sends error if user already exists', () => {
+  it('sends error if user already exists', done => {
     return server.inject({
       method: 'POST',
       url: '/signup',
@@ -89,6 +118,7 @@ describe('Auth sign up', () => {
     }, res => {
       assert.deepEqual(res.statusCode, 403);
       assert.ok(/Email is invalid or already taken/.test(JSON.parse(res.payload).message));
+      done();
     });
   });
 });
@@ -98,7 +128,7 @@ describe('Auth forgotten password', () => {
     return helpers.setup();
   });
 
-  it('creates password token and timestamp', () => {
+  it('creates password token and timestamp', done => {
     return server.inject({
       method: 'POST',
       url: '/forgot',
@@ -106,11 +136,12 @@ describe('Auth forgotten password', () => {
         email: 'garren@redcometlabs.com'
       }
     }, res => {
-      assert.equal(JSON.parse(res.payload).message, 'Cannot find a user with that email');
+      assert.ok(/An email with/.test(JSON.parse(res.payload).message));
+      done();
     });
   });
 
-  it('returns error if user does not exist', () => {
+  it('returns error if user does not exist', done => {
     return server.inject({
       method: 'POST',
       url: '/forgot',
@@ -120,19 +151,27 @@ describe('Auth forgotten password', () => {
     }, res => {
       assert.deepEqual(res.statusCode, 403);
       assert.ok(/Cannot find a user with that email/.test(JSON.parse(res.payload).message));
+      done();
     });
   });
 });
 
 describe('Updating an account', () => {
-  before(() => {
+  beforeEach(() => {
     return helpers.setup();
   });
 
-  it('returns error if user does not exist', () => {
-    return server.inject({
+  it('returns error if existing email does not exist', done => {
+    const user = {
+      name: 'Garren',
+      email: 'garren@redcometlabs.com',
+      password: 'password'
+    };
+
+    server.inject({
       method: 'POST',
       url: '/update-user',
+      credentials: user,
       payload: {
         email: 'new@gmail.com',
         name: 'Bill',
@@ -140,21 +179,74 @@ describe('Updating an account', () => {
       }
     }, res => {
       assert.deepEqual(res.statusCode, 403);
-      assert.ok(/Cannot find a user with that email/.test(JSON.parse(res.payload).message));
+      assert.ok(/Could not update account/.test(JSON.parse(res.payload).message));
+      done();
     });
   });
 
-  it('returns error if user does exist', () => {
-    return server.inject({
+  it('returns error if new email already exists', done => {
+    const user = {
+      name: 'Guest',
+      email: 'guest@guest.com',
+      password: 'guest'
+    };
+
+    server.inject({
       method: 'POST',
       url: '/update-user',
+      credentials: user,
       payload: {
-        email: 'new@gmail.com',
+        email: 'garren@redcometlabs.com',
         name: 'Bill',
         oldEmail: 'guest@guest.com'
       }
     }, res => {
-      assert.ok(/Cannot find a user with that email/.test(JSON.parse(res.payload).message));
+      assert.ok(/Could not update account/.test(JSON.parse(res.payload).message));
+      done();
+    });
+  });
+
+  it('cannot update a different users details compared to authenticated user', done => {
+    const user = {
+      name: 'Guest',
+      email: 'guest@guest.com',
+      password: 'guest'
+    };
+
+    server.inject({
+      method: 'POST',
+      url: '/update-user',
+      credentials: user,
+      payload: {
+        email: 'fancy@redcometlabs.com',
+        name: 'Bill',
+        oldEmail: 'garren@redcometlabs.com'
+      }
+    }, res => {
+      assert.ok(/Could not update account/.test(JSON.parse(res.payload).message));
+      done();
+    });
+  });
+
+  it('updates users details', done => {
+    const user = {
+      name: 'Guest',
+      email: 'guest@guest.com',
+      password: 'guest'
+    };
+
+    server.inject({
+      method: 'POST',
+      url: '/update-user',
+      credentials: user,
+      payload: {
+        email: 'fancyemail@redcometlabs.com',
+        name: 'Bill',
+        oldEmail: 'guest@guest.com'
+      }
+    }, res => {
+      assert.ok(JSON.parse(res.payload).ok);
+      done();
     });
   });
 

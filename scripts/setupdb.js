@@ -15,3 +15,8 @@ function createIndex () {
   })
 }
 module.exports = createIndex;
+
+if (require.main === module) {
+  console.log('CREATING INDEXES');
+  createIndex();
+}

@@ -109,7 +109,7 @@ describe('User tests', () => {
       .then(user => {
         return createForgottenPasswordToken(user.email);
       })
-      .then(res => {
+      .then(() => {
         return getUser(user.email);
       })
       .then(foundUser => {
@@ -132,7 +132,7 @@ describe('User tests', () => {
       .then(user => {
         return createForgottenPasswordToken(user.email);
       })
-      .then(res => {
+      .then(() => {
         return getUser(user.email);
       })
       .then(foundUser => {
@@ -145,7 +145,7 @@ describe('User tests', () => {
 
     it('returns correct error when the user token is incorrect', () => {
       return getUser(user.email)
-      .then(foundUser => {
+      .then(() => {
         return userSavePassword(user.email, 'wrong token', user.password);
       })
       .catch(err => {
@@ -170,7 +170,7 @@ describe('User tests', () => {
         email: 'new@gmail.com',
         name: 'Bill',
         oldEmail: 'guest@guest.com'
-      }
+      };
       return updateAccountDetails(userObject)
         .then(result => {
           assert.equal(result.message, 'Account updated');
@@ -193,7 +193,7 @@ describe('User tests', () => {
         email: 'new@gmail.com',
         name: 'Bill',
         oldEmail: 'noexist@guest.com'
-      }
+      };
 
 
       return updateAccountDetails(userObject)

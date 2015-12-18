@@ -12,9 +12,15 @@ import thunkMiddleware from 'redux-thunk';
 
 /* Spectre Components */
 import {AppContainer} from './components/App';
-import Home from './components/Home';
-import Account from './components/Account';
+import {HomeContainer} from './components/Home';
+import {AccountContainer} from './components/Account';
 import Secret from './components/Secret';
+
+/* Auth Components */
+import {LoginContainer} from './components/auth/Login';
+import {ForgotContainer} from './components/auth/Forgot';
+import {RegisterContainer} from './components/auth/Register';
+import {ResetContainer} from './components/auth/Reset';
 
 /* Redux store created with middleware to enable aync actions */
 const createStoreWithMiddleware = applyMiddleware(thunkMiddleware)(createStore);
@@ -22,9 +28,13 @@ const store = createStoreWithMiddleware(reducer);
 
 /* Routes */
 const routes = <Route component={AppContainer}>
-  <Route path="/" component={Home}/>
-  <Route path="/account" component={Account}/>
+  <Route path="/" component={HomeContainer}/>
+  <Route path="/account" component={AccountContainer}/>
   <Route path="/secret" component={Secret}/>
+  <Route path="login" component={LoginContainer}/>
+  <Route path="register" component={RegisterContainer}/>
+  <Route path="forgot" component={ForgotContainer}/>
+  <Route path="reset/:resetToken/:userEmail" component={ResetContainer}/>
 </Route>;
 
 ReactDOM.render(

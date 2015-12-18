@@ -16,4 +16,4 @@ This is the Red Comet Labs starter template for projects. It is Hapi.js on the s
 
 ## Production
 
-Run `make prod`, this will bundle everything into `/dist/` and serve it via hapi.js.
+Run `make prod`, this will bundle everything into `/dist/` and serve it via hapi.js. Remember to set the `NODE_ENV` to production.

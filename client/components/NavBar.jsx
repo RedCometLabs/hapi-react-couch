@@ -1,10 +1,28 @@
 import React from 'react';
 import {Link} from 'react-router';
+import _ from 'lodash';
 
 const NavBar = React.createClass({
 
-  render() {
+  getHeaderLinks: function() {
+    var universalLinks = [<li key='Home'><Link to="/">Home</Link></li>];
+    var authenticatedLinks = [
+      <li key='Account'><Link to="/account">Account</Link></li>,
+      <li key='Logout'><a onClick={this.props.logout}>Logout</a></li>
+    ];
+    var unAuthenticatedLinks = [
+      <li key='Login'><Link to="/login">Login</Link></li>,
+      <li key='Register'><Link to="/register" >Register</Link></li>
+    ];
 
+    if (this.props.authenticated) {
+      return _.union(universalLinks, authenticatedLinks);
+    }
+
+    return _.union(universalLinks, unAuthenticatedLinks);
+  },
+
+  render() {
     return (
       <nav className="navbar navbar-inverse">
         <div className="container-fluid">
@@ -15,15 +33,11 @@ const NavBar = React.createClass({
               <span className="icon-bar"></span>
               <span className="icon-bar"></span>
             </button>
-            <a className="navbar-brand" href="#">Hapi-React-Couch</a>
+            <a className="navbar-brand" href="#">Run Pouch Run</a>
           </div>
           <div id="navbar" className="navbar-collapse collapse">
             <ul className="nav navbar-nav">
-              <li key='Home'><Link to="/">Home</Link></li>
-              <li key='Account'><Link to="/account">Account</Link></li>
-              {this.props.example?
-                <li key='Secret'><Link to="/secret">Secret Page</Link></li> : null
-              }
+              {this.getHeaderLinks()}
             </ul>
           </div>
         </div>

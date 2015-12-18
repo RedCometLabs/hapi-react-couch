@@ -8,9 +8,9 @@ const {renderIntoDocument, scryRenderedDOMComponentsWithTag}
 
 describe('NavBar', () => {
 
-  it('renders the Navbar component correctly when EXAMPLE is set to true', () => {
+  it('renders the Navbar component correctly when the user is authenticated', () => {
     const component = renderIntoDocument(
-      <NavBar example={true} />
+      <NavBar authenticated={true} />
     );
 
     const links = scryRenderedDOMComponentsWithTag(component, 'li');
@@ -18,18 +18,19 @@ describe('NavBar', () => {
 
     expect(links[0].getDOMNode().textContent).to.equal('Home');
     expect(links[1].getDOMNode().textContent).to.equal('Account');
-    expect(links[2].getDOMNode().textContent).to.equal('Secret Page');
+    expect(links[2].getDOMNode().textContent).to.equal('Logout');
   });
 
-  it('renders the Navbar component correctly when EXAMPLE is set to false', () => {
+  it('renders the Navbar component correctly when the user is NOT authenticated', () => {
     const component = renderIntoDocument(
-      <NavBar example={false} />
+      <NavBar authenticated={false} />
     );
 
     const links = scryRenderedDOMComponentsWithTag(component, 'li');
-    expect(links.length).to.equal(2);
+    expect(links.length).to.equal(3);
 
     expect(links[0].getDOMNode().textContent).to.equal('Home');
-    expect(links[1].getDOMNode().textContent).to.equal('Account');
+    expect(links[1].getDOMNode().textContent).to.equal('Login');
+    expect(links[2].getDOMNode().textContent).to.equal('Register');
   });
 });

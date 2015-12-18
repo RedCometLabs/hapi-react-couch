@@ -104,7 +104,11 @@ exports.register = function(server, options, next) {
         createUser(name, email, password)
           .then(user => {
             request.auth.session.set(user);
-            return reply({user:user});
+            //only send what is required
+            return reply({user:{
+              name: user.name,
+              email: user.email
+            }});
           })
           .catch(err => {
             console.log('err', err);
@@ -118,7 +122,7 @@ exports.register = function(server, options, next) {
     method: 'POST',
     path: '/update-user',
     config: {
-      auth: false,
+      auth: 'standard',
       validate: {
         payload: {
           name: Joi.string().required(),
@@ -127,6 +131,9 @@ exports.register = function(server, options, next) {
         }
       },
       handler: function(request, reply) {
+        if (request.payload.oldEmail !== request.auth.credentials.email) {
+          return reply(Boom.forbidden('Could not update account details!'));
+        }
 
         updateAccountDetails(request.payload)
           .then(resp => {

@@ -23,8 +23,7 @@ const users = [
 const helpers = {
   createUsers: function () {
     return Promise.all(users.map(user => createUser(user.name, user.email, user.password)))
-    .then(resp => {return;}
-      , err => {
+    .catch(err => {
       console.log('add users err ', err);
     });
   },
@@ -37,9 +36,6 @@ const helpers = {
 
   createIndex: function(){
     return createIndex()
-      .then(res => {
-        return;
-      })
       .catch(err => {
         console.log('index db err', err);
       });

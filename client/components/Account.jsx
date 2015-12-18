@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import * as Actions from '../redux/action-creators/index'
+import * as actionCreators from '../redux/action-creators/index';
 
 const Account = React.createClass({
 
@@ -18,4 +18,11 @@ const Account = React.createClass({
   }
 });
 
-export default connect()(Account);
+/* Reflux connector */
+function mapStateToProps(state) {
+  return {
+    user: state.get('user')
+  };
+}
+
+export const AccountContainer = connect(mapStateToProps, actionCreators)(Account);
