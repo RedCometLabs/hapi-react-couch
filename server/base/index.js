@@ -6,7 +6,7 @@ exports.register = function(server, options, next){
     config: {
       auth: false,
       handler: function(request, reply){
-        reply.file('./assets/index.html');
+        reply.file('./dist/index.html');
       }
     }
   });
@@ -18,7 +18,7 @@ exports.register = function(server, options, next){
       auth: false,
        handler: {
            directory: {
-            path: 'assets'
+            path: 'dist'
           }
        }
      }

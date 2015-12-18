@@ -1,10 +1,9 @@
-var hoek = require('hoek');
 const env = process.env.NODE_ENV || 'dev';
 
 var config = {
   couch: {
     connect: process.env.COUCH || 'http://127.0.0.1:5984/',
-    db: 'spectre-' + env
+    db: 'test-db-' + env
   },
   crypto: {
     salt: 'THIS IS THE VERY LONG TEST SALT',
