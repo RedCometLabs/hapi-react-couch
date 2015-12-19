@@ -17,7 +17,7 @@ module.exports = {
     extensions: ['', '.js', '.jsx'] //We can use .js and React's .jsx files using Babel
   },
   output: {
-    path: __dirname + '/dist',
+    path: __dirname + '/public',
     publicPath: '/',
     filename: 'bundle.js' //All our code is compiled into a single file called bundle.js
   },

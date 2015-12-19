@@ -6,7 +6,7 @@ exports.register = function(server, options, next){
     config: {
       auth: false,
       handler: function(request, reply){
-        reply.file('./dist/index.html');
+        reply.file('./public/index.html');
       }
     }
   });
@@ -31,7 +31,7 @@ exports.register = function(server, options, next){
         auth: false,
         handler: {
           directory: {
-            path: 'dist'
+            path: 'public'
           }
         }
       }

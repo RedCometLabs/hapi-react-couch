@@ -11,16 +11,16 @@ test:
 	npm test
 
 less:
-	lessc assets/less/index.less > dist/css/index.css
+	lessc assets/less/index.less > public/css/index.css
 
 hint:
 	npm run link
 
 clean:
-	rm -rf dist/
+	rm -rf public/
 
 setup:
-	mkdir -p dist/css
+	mkdir -p public/css
 
 webpack-dev:
 	webpack --debug --progress --colors --config ./webpack.config.dev.js
@@ -39,7 +39,7 @@ client:
 	webpack-dev-server --config ./webpack.config.dev.js
 
 index.html:
-	cp ./assets/index.html ./dist/index.html
+	cp ./assets/index.html ./public/index.html
 
 setupdb:
 	npm run setupdb

@@ -11,7 +11,7 @@
   ],
   "main": "server.js",
   "engines": {
-    "node": ">0.10.x"
+    "node": ">5.0"
   },
   "scripts": {
     "server-start": "babel-node server.js",
@@ -21,7 +21,8 @@
     "ci-test": "./scripts/pouchdb-test.sh && npm test",
     "test": "npm run server-test && npm run client-test",
     "lint": "eslint client",
-    "setupdb": "node ./scripts/setupdb.js"
+    "setupdb": "node ./scripts/setupdb.js",
+    "postinstall": "make prod"
   },
   "babel": {
     "presets": [
@@ -72,6 +73,7 @@
     "redux": "~3.0.4",
     "redux-thunk": "~1.0.0",
     "remarkable": "~1.6.0",
+    "webpack": "~1.12.3",
     "whatwg-fetch": "~0.10.1"
   },
   "devDependencies": {
@@ -86,7 +88,6 @@
     "react-hot-loader": "~1.3.0",
     "sinon": "~1.17.2",
     "sinon-chai": "~2.8.0",
-    "webpack": "~1.12.3",
     "webpack-dev-server": "~1.14.0"
   },
   "license": "MIT"

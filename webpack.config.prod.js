@@ -8,14 +8,14 @@ module.exports = {
   ],
 
   output: {
-        path: path.join(__dirname, 'dist'),
-        filename: "bundle.js"
-    },
+    path: path.join(__dirname, 'public'),
+    filename: 'bundle.js'
+  },
 
   plugins: [
     new webpack.DefinePlugin({
-      "process.env": {
-        "NODE_ENV": JSON.stringify("production") // This has effect on the react lib size
+      'process.env': {
+        'NODE_ENV': JSON.stringify('production') // This has effect on the react lib size
       }
     }),
     new webpack.optimize.DedupePlugin(),
@@ -47,9 +47,9 @@ module.exports = {
         exclude: /node_modules/,
         loader: 'babel',
         query: {
-                    presets: ['es2015', 'react']
-                }
-      },
+          presets: ['es2015', 'react']
+        }
+      }
       // Pass *.jsx files through jsx-loader transform
       /*{
         test: /\.jsx$/,
@@ -57,6 +57,6 @@ module.exports = {
       }*/
     ]
   },
-  //devtool: "#inline-source-map",
+  devtool: 'source-map',
   externals: { }
 };
