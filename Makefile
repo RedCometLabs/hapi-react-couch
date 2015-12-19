@@ -26,12 +26,13 @@ webpack-dev:
 	webpack --debug --progress --colors --config ./webpack.config.dev.js
 
 watch:
-	 nodemon -e js,jsx,less,md -w ./app -w ./lib -x make build-dev
+	 nodemon -e js,jsx,less,md -w ./client -w ./server -w ./lib -x make webpack-dev
 
 watch-tests:
 	 nodemon -e js,jsx,less -w ./lib -w ./app -w ./tests -x npm test
 
 server:
+	NODE_ENV=development npm run setupdb
 	NODE_ENV=development node server.js
 
 client:

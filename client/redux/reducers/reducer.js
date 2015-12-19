@@ -18,7 +18,6 @@ export default function (state = initialState, action = {}) {
       user : data.user
     });
   case 'USER_LOGOUT_SUCCEEDED':
-    console.log('logout');
     return state.merge({
       authenticated: false,
       user : null

@@ -12,7 +12,7 @@ This is the Red Comet Labs starter template for projects. It is Hapi.js on the s
 
 ## Development
 
-`make server` to run the server instance and `make client` to run the client side. Then visit http://127.0.0.1:8080 for the web app.
+`make server` to run the server instance and `make client` to run the client side. Then visit http://127.0.0.1:3000 for the web app.
 
 ## Production
 

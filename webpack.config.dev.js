@@ -11,7 +11,7 @@ module.exports = {
       test: /\.jsx?$/,
       exclude: /node_modules/,
       loader: 'react-hot!babel'
-    }],
+    }]
   },
   resolve: {
     extensions: ['', '.js', '.jsx'] //We can use .js and React's .jsx files using Babel

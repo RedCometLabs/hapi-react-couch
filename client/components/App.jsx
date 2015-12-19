@@ -23,10 +23,8 @@ export const App = React.createClass({
   render() {
     return (
       <div>
-        <div>
-          <NavBar {...this.props} />
-          {this.props.children}
-        </div>
+        <NavBar {...this.props} />
+        {this.props.children}
       </div>
     );
   }

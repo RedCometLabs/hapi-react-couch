@@ -42,11 +42,15 @@ exports.register = function(server, options, next) {
         }
       },
       handler: function(request, reply) {
-
         getValidatedUser(request.payload.email, request.payload.password)
           .then(function(user) {
-            request.auth.session.set(user);
-            return reply({user:user});
+            var safeUser = {
+              email: user.email,
+              name: user.name
+            };
+
+            request.auth.session.set(safeUser);
+            return reply({user:safeUser});
           })
           .catch(function(err) {
             return reply(Boom.unauthorized('Bad email or password'));
@@ -63,7 +67,7 @@ exports.register = function(server, options, next) {
       handler: function(request, reply) {
 
         request.auth.session.clear();
-        return reply('Logout Successful!');
+        return reply({ok: true, message: 'Logout Successful!'});
 
       }
     }
@@ -79,8 +83,10 @@ exports.register = function(server, options, next) {
         //Whatever you pass to request.auth.session.set() will be available in request.auth.credentials.
         //But it will only be there on secured routes. That tripped me up a bit.
         //I figured it should always be there for every route.
-        return reply('Session Successful!');
-
+        return reply({user: {
+          name: request.auth.credentials.name,
+          email: request.auth.credentials.email
+        }});
       }
     }
   });
@@ -127,7 +133,7 @@ exports.register = function(server, options, next) {
         payload: {
           name: Joi.string().required(),
           email: Joi.string().email().required(),
-          oldEmail: Joi.string().email().required(),
+          oldEmail: Joi.string().email().required()
         }
       },
       handler: function(request, reply) {
@@ -137,13 +143,18 @@ exports.register = function(server, options, next) {
 
         updateAccountDetails(request.payload)
           .then(resp => {
+            request.auth.session.set({
+              name: resp.user.name,
+              email: resp.user.email
+            });
+
             return reply({
               message: resp.message,
               ok: true
             });
           })
           .catch(err => {
-            console.log('err', err);
+            console.log('err', err.message);
             reply(Boom.wrap(err, 403));
           });
       }

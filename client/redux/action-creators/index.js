@@ -6,10 +6,10 @@ export function loginSubmitted(userData) {
     .then(function(data){
       dispatch(userLoggedIn(data));
     })
-    .catch(function(ex) {
+    .catch(() => {
       dispatch(applicationError('Sorry! Those login details are incorrect.'));
-    })
-  }
+    });
+  };
 }
 
 export function resetUserPassword(userData) {
@@ -18,21 +18,21 @@ export function resetUserPassword(userData) {
     .then(function(data){
       dispatch(userLoggedIn(data));
     })
-    .catch(function(ex) {
+    .catch(() => {
       dispatch(applicationError('Sorry! There was an error in resetting your password'));
-    })
-  }
+    });
+  };
 }
 
 export function forgotPassword(email) {
   return function(dispatch) {
     post('forgot', email)
-    .then(response => {
+    .then(() => {
       dispatch(applicationInfo('Check your emails for details on how to reset your Account'));
-    }).catch(ex => {
+    }).catch(() => {
       dispatch(applicationError('An account with that email address does not exist'));
     });
-  }
+  };
 }
 
 export function registerUser(userData) {
@@ -40,10 +40,10 @@ export function registerUser(userData) {
     post('signup', userData)
     .then(function(data) {
       dispatch(userLoggedIn(data));
-    }).catch(function(ex) {
+    }).catch(() => {
       dispatch(applicationError('Sorry! Your sign up failed'));
-    })
-  }
+    });
+  };
 }
 
 export function checkUserSession() {
@@ -51,7 +51,7 @@ export function checkUserSession() {
     get('session')
       .then(function(data) {
         dispatch(userLoggedIn(data));
-      }).catch(function(ex) {
+      }).catch(ex => {
         console.log(ex);
       });
   };
@@ -60,39 +60,40 @@ export function checkUserSession() {
 export function logout() {
   return function(dispatch) {
     get('logout')
-      .then(function(response) {
+      .then(() => {
         dispatch(userLogoutSuceeded());
-      }).catch(function(ex) {
+        dispatch(applicationInfo('Logout successful'));
+      }).catch(() => {
         dispatch(applicationError('Sorry! Logging out failed'));
-      })
+      });
   };
 }
 
 export function updateUserDetails(newUserDetails) {
   return function(dispatch) {
     post('update-user', newUserDetails)
-    .then(function(data) {
+    .then(() => {
       dispatch(userUpdated(newUserDetails));
-    }).catch(function(ex) {
-      console.log(ex);
+      dispatch(applicationInfo('Your details have been updated'));
+    }).catch(() => {
       dispatch(applicationError('Sorry! We could not update your account details'));
-    })
-  }
+    });
+  };
 }
 
 
 
 
 export function clearErrors() {
-    return {
-      type: 'CLEAR_ERRORS'
-    };
+  return {
+    type: 'CLEAR_ERRORS'
+  };
 }
 
 export function clearInfo(){
   return {
     type: 'CLEAR_INFO'
-  }
+  };
 }
 
 function userLoggedIn(data) {

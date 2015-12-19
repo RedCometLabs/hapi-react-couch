@@ -25,37 +25,40 @@ server.connection({
     Second: project specific plugins are loaded
  */
 server.register([
-    {
-        register: require("good"),
-        options: {
-            reporters: [{
-                reporter: require('good-console'),
-                events: { ops: '*', request: '*', log: '*', response: '*', 'error': '*' }
-            }]
-        }
-    },
-    {
-        register: require('inert')
-    },
-    {
-        register: require('./server/auth/index.js')
-    },
-    {
-        register: require('./server/example/index.js')
-    },
-    {
-        register: require('./server/base/index.js')
+  {
+    register: require('good'),
+    options: {
+      reporters: [{
+        reporter: require('good-console'),
+        events: { ops: '*', request: '*', log: '*', response: '*', 'error': '*' }
+      }]
     }
-], function (err) {
+  },
+  {
+    register: require('inert')
+  },
+  {
+    register: require('h2o2')
+  },
+  {
+    register: require('./server/auth/index.js')
+  },
+  {
+    register: require('./server/example/index.js')
+  },
+  {
+    register: require('./server/base/index.js')
+  }
+], function () {
     //Start the server
-    if (require.main !== module) {
-      return;
-    }
+  if (require.main !== module) {
+    return;
+  }
 
-    server.start(function() {
-        //Log to the console the host and port info
-        console.log('Server started at: ' + server.info.uri);
-    });
+  server.start(function() {
+      //Log to the console the host and port info
+    console.log('Server started at: ' + server.info.uri);
+  });
 });
 
 // Export the server to be required elsewhere.

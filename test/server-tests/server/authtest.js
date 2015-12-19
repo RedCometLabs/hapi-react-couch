@@ -83,7 +83,7 @@ describe('Auth sign up', () => {
         credentials: user
       }, res => {
         assert.deepEqual(res.statusCode, 200);
-        assert.ok(/Successful/.test(res.payload));
+        assert.deepEqual(JSON.parse(res.payload).user.name, user.name);
 
         done();
       });
@@ -184,7 +184,7 @@ describe('Updating an account', () => {
     });
   });
 
-  it('returns error if new email already exists', done => {
+  it('returns error if new email already exists and not equal to old email', done => {
     const user = {
       name: 'Guest',
       email: 'guest@guest.com',
@@ -202,6 +202,28 @@ describe('Updating an account', () => {
       }
     }, res => {
       assert.ok(/Could not update account/.test(JSON.parse(res.payload).message));
+      done();
+    });
+  });
+
+  it('updates just name', done => {
+    const user = {
+      name: 'Guest',
+      email: 'guest@guest.com',
+      password: 'guest'
+    };
+
+    server.inject({
+      method: 'POST',
+      url: '/update-user',
+      credentials: user,
+      payload: {
+        email: 'guest@guest.com',
+        name: 'Bill',
+        oldEmail: 'guest@guest.com'
+      }
+    }, res => {
+      assert.ok(JSON.parse(res.payload).ok);
       done();
     });
   });
@@ -249,5 +271,4 @@ describe('Updating an account', () => {
       done();
     });
   });
-
 });

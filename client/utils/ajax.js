@@ -4,7 +4,8 @@
 */
 
 import config from '../../config';
-const baseUrl = 'http://' + config.app.host + ':' + config.app.port + '/';
+//const baseUrl = 'http://' + config.app.host + ':' + config.app.port + '/';
+const baseUrl = '/';
 
 export function post(url, body) {
   return request('post', url, body)
@@ -14,7 +15,9 @@ export function post(url, body) {
 }
 
 export function get(url) {
-  return request('get', url, null);
+  return request('get', url, null).then((response) => {
+    return response.json();
+  });
 }
 
 function request (method, url, body) {

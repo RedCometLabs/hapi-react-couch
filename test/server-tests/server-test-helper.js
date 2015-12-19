@@ -31,7 +31,11 @@ const helpers = {
   setup: function () {
     return this.clearDB()
     .then(() => {return this.createIndex();})
-    .then(() => {return this.createUsers();});
+    .then(() => {return this.createUsers();})
+    .catch(err => {
+      console.log('err', err);
+
+    });
   },
 
   createIndex: function(){

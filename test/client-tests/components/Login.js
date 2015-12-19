@@ -22,7 +22,7 @@ describe('Login', () => {
 
 
     const inputs = scryRenderedDOMComponentsWithTag(component, 'input');
-    expect(inputs.length).to.equal(2);
+    expect(inputs.length).to.equal(3);
   });
 
 
