@@ -1,11 +1,9 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import * as actionCreators from '../../redux/action-creators/index';
-import { History } from 'react-router';
 import { Col, Input, ButtonInput } from 'react-bootstrap';
 
-export const Reset = React.createClass({
-  mixins: [ History ],
+const Reset = React.createClass({
 
   getInitialState: function() {
     return {
@@ -21,18 +19,14 @@ export const Reset = React.createClass({
 
   handleFormSubmit(e){
     e.preventDefault();
-    const { resetUserPassword } = this.props;
-    resetUserPassword({
+
+    const { dispatch } = this.props;
+
+    dispatch(actionCreators.resetUserPassword({
       email: this.props.params.userEmail,
       resetToken: this.props.params.resetToken,
       newPassword: this.state.password
-    });
-  },
-
-  componentWillReceiveProps: function(nextProps) {
-    if(nextProps.authenticated){
-      this.history.replaceState(null, '/');
-    }
+    }));
   },
 
   render() {
@@ -51,11 +45,4 @@ export const Reset = React.createClass({
   }
 });
 
-/* Reflux connector */
-function mapStateToProps(state) {
-  return {
-    authenticated: state.get('authenticated')
-  };
-}
-
-export const ResetContainer = connect(mapStateToProps, actionCreators)(Reset);
+export default connect()(Reset);

@@ -33,11 +33,10 @@ describe('Login', () => {
     expect(handleFormSubmit).to.not.have.been.calledOnce;
 
 
-    let loginSubmitted;
-    const loginSubmittedProp = (userDetails) => loginSubmitted = userDetails;
+    const dispatch = sinon.spy();
 
     const component = renderIntoDocument(
-      <Login loginSubmitted={loginSubmittedProp}/>
+      <Login dispatch={dispatch}/>
     );
     const form = findRenderedDOMComponentWithTag(component, 'form');
     const inputs = scryRenderedDOMComponentsWithTag(component, 'input');
@@ -54,7 +53,7 @@ describe('Login', () => {
 
     Simulate.submit(form);
     expect(handleFormSubmit).to.have.been.calledOnce;
-    expect(loginSubmitted).to.deep.equal({ email: 'a@gmail.com', password: '' });
-  });
 
+    expect(dispatch).to.have.been.calledOnce;
+  });
 });

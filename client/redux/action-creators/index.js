@@ -1,10 +1,12 @@
 import {post, get} from '../../utils/ajax.js';
+import history from '../../utils/history';
 
 export function loginSubmitted(userData) {
   return function(dispatch) {
     post('login', userData)
     .then(function(data){
       dispatch(userLoggedIn(data));
+      history.replaceState(null, '/');
     })
     .catch(() => {
       dispatch(applicationError('Sorry! Those login details are incorrect.'));
@@ -40,6 +42,7 @@ export function registerUser(userData) {
     post('signup', userData)
     .then(function(data) {
       dispatch(userLoggedIn(data));
+      history.replaceState(null, '/');
     }).catch(() => {
       dispatch(applicationError('Sorry! Your sign up failed'));
     });
@@ -63,6 +66,7 @@ export function logout() {
       .then(() => {
         dispatch(userLogoutSuceeded());
         dispatch(applicationInfo('Logout successful'));
+        history.replaceState(null, '/');
       }).catch(() => {
         dispatch(applicationError('Sorry! Logging out failed'));
       });

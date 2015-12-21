@@ -1,11 +1,9 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {History } from 'react-router';
 import * as actionCreators from '../redux/action-creators/index';
 import { Col, Input, ButtonInput } from 'react-bootstrap';
 
 export const Account = React.createClass({
-  mixins: [ History ],
 
   getUserFromProps (props) {
     return {
@@ -22,16 +20,11 @@ export const Account = React.createClass({
         name: ''
       };
     }
-
     return this.getUserFromProps(this.props);
   },
 
   componentWillReceiveProps: function(nextProps) {
-    if(!nextProps.authenticated){
-      this.history.replaceState(null, '/');
-    } else {
-      this.updateUserIfEmpty(nextProps);
-    }
+    this.updateUserIfEmpty(nextProps);
   },
 
   handleChange: function(event){
@@ -43,13 +36,13 @@ export const Account = React.createClass({
   handleFormSubmit(e) {
     e.preventDefault();
 
-    const { updateUserDetails } = this.props;
+    const { dispatch } = this.props;
 
-    updateUserDetails({
+    dispatch(actionCreators.updateUserDetails({
       email: this.state.email,
       name: this.state.name,
       oldEmail: this.props.user.get('email')
-    });
+    }));
   },
 
   updateUserIfEmpty(props) {
@@ -57,7 +50,6 @@ export const Account = React.createClass({
     if (this.state.name.length === 0 && this.state.email.length === 0) {
       this.setState(this.getUserFromProps(props));
     }
-
   },
 
   render() {
@@ -80,9 +72,8 @@ export const Account = React.createClass({
 /* Reflux connector */
 function mapStateToProps(state) {
   return {
-    user: state.get('user'),
-    authenticated: state.get('authenticated')
+    user: state.get('user')
   };
 }
 
-export const AccountContainer = connect(mapStateToProps, actionCreators)(Account);
+export const AccountContainer = connect(mapStateToProps)(Account);

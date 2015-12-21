@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import * as actionCreators from '../../redux/action-creators/index';
 import { Col, Input, ButtonInput } from 'react-bootstrap';
 
-export const Forgot = React.createClass({
+const Forgot = React.createClass({
 
   getInitialState: function() {
     return {
@@ -19,10 +19,12 @@ export const Forgot = React.createClass({
 
   handleFormSubmit(e) {
     e.preventDefault();
-    const { forgotPassword } = this.props;
-    forgotPassword({
+
+    const { dispatch } = this.props;
+
+    dispatch(actionCreators.forgotPassword({
       email: this.state.email
-    });
+    }));
   },
 
   render() {
@@ -40,11 +42,4 @@ export const Forgot = React.createClass({
   }
 });
 
-/* Reflux connector */
-function mapStateToProps(state) {
-  return {
-    authenticated: state.get('authenticated')
-  };
-}
-
-export const ForgotContainer = connect(mapStateToProps, actionCreators)(Forgot);
+export default connect()(Forgot);
