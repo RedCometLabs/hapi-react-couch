@@ -31,7 +31,7 @@ watch:
 watch-tests:
 	 nodemon -e js,jsx,less -w ./lib -w ./app -w ./tests -x npm test
 
-server:
+server: clean setup less index.html
 	NODE_ENV=development npm run setupdb
 	NODE_ENV=development node server.js
 

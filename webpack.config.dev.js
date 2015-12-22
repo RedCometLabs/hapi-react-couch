@@ -22,7 +22,7 @@ module.exports = {
     filename: 'bundle.js' //All our code is compiled into a single file called bundle.js
   },
   devServer: {
-    contentBase: './dist',
+    contentBase: './public',
     hot: true
   },
   plugins: [
