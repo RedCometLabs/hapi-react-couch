@@ -1,12 +1,10 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import * as actionCreators from '../../redux/action-creators/index';
-import {History } from 'react-router';
 import { Link } from 'react-router';
 import { Col, Input, ButtonInput } from 'react-bootstrap';
 
 export const Login = React.createClass({
-  mixins: [ History ],
 
   getInitialState: function() {
     return {
@@ -24,19 +22,12 @@ export const Login = React.createClass({
   handleFormSubmit(e) {
     e.preventDefault();
 
+    const { dispatch } = this.props;
 
-    const { loginSubmitted } = this.props;
-
-    loginSubmitted({
+    dispatch(actionCreators.loginSubmitted({
       email: this.state.email,
       password: this.state.password
-    });
-  },
-
-  componentWillReceiveProps: function(nextProps) {
-    if(nextProps.authenticated){
-      this.history.replaceState(null, '/');
-    }
+    }));
   },
 
   render() {
@@ -56,11 +47,4 @@ export const Login = React.createClass({
   }
 });
 
-/* Reflux connector */
-function mapStateToProps(state) {
-  return {
-    authenticated: state.get('authenticated')
-  };
-}
-
-export const LoginContainer = connect(mapStateToProps, actionCreators)(Login);
+export default connect()(Login);

@@ -3,7 +3,7 @@
   to reduce the amount of boilerplate
 */
 
-import config from '../../config';
+//import config from '../../config';
 //const baseUrl = 'http://' + config.app.host + ':' + config.app.port + '/';
 const baseUrl = '/';
 
