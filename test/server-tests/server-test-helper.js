@@ -34,7 +34,6 @@ const helpers = {
     .then(() => {return this.createUsers();})
     .catch(err => {
       console.log('err', err);
-
     });
   },
 
@@ -58,7 +57,6 @@ const helpers = {
       })
       .catch(err => {
         console.log('clear db err', err);
-        console.log("error erro!");
       });
   }
 };

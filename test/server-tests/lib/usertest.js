@@ -1,14 +1,16 @@
 
 import * as helpers from '../server-test-helper';
 import {assert} from 'chai';
-import {createUser, getValidatedUser, getUser, createForgottenPasswordToken, checkUserExists, upgradeAccount, userSavePassword, updateAccountDetails} from '../../../lib/user';
+import {
+  createUser, getValidatedUser, getUser, createForgottenPasswordToken,
+  checkUserExists, userSavePassword, updateAccountDetails, verifyUser
+} from '../../../lib/user';
 
 describe('User tests', () => {
 
-  before(() => {
+  beforeEach(() => {
     return helpers.setup();
   });
-
 
   describe('getUser', () => {
     it('returns the not found error if the user does not exist', () => {
@@ -127,11 +129,12 @@ describe('User tests', () => {
       password: 'Ireset'
     };
 
+    beforeEach(() => {
+      return createUser(user.name, user.email, user.password);
+    });
+
     it('it saves a new password when the user resets their account', () => {
-      return createUser(user.name, user.email, user.password)
-      .then(user => {
-        return createForgottenPasswordToken(user.email);
-      })
+      return createForgottenPasswordToken(user.email)
       .then(() => {
         return getUser(user.email);
       })
@@ -179,10 +182,18 @@ describe('User tests', () => {
 
 
     it('returns the updated user using the new email address credentials', () => {
+      let userObject = {
+        email: 'new123@gmail.com',
+        name: 'Bill',
+        oldEmail: 'guest@guest.com'
+      };
 
-      return getUser('new@gmail.com')
-        .then(user => {
-          assert.equal(user.email, 'new@gmail.com');
+      return updateAccountDetails(userObject)
+        .then(() => {
+          return getUser('new123@gmail.com')
+            .then(user => {
+              assert.equal(user.email, 'new123@gmail.com');
+            });
         });
     });
 
@@ -195,11 +206,52 @@ describe('User tests', () => {
         oldEmail: 'noexist@guest.com'
       };
 
-
       return updateAccountDetails(userObject)
         .catch(err => {
           assert.equal('Could not update account', err.message);
         });
+    });
+
+  });
+
+
+
+  describe('verifyUser', () => {
+
+    const user = {
+      name: 'Verify',
+      email: 'verify@example.com',
+      password: 'verify'
+    };
+
+    let createdUser;
+
+    beforeEach(() => {
+      return createUser(user.name, user.email, user.password)
+        .then(newUser => {createdUser = newUser;});
+    });
+
+    it('it verifies the user when they pass in their correct token', () => {
+      user.verificationToken = createdUser.verification.verificationToken;
+      getUser(createdUser.email)
+      .then(() => {
+        return verifyUser(user);
+      })
+      .then(res => {
+        assert.equal(res.user.verification.status, true);
+        assert.equal(res.message,'User Verified');
+      });
+    });
+
+
+    it('returns correct error when the verification token is incorrect', () => {
+      return getUser(user.email)
+      .then(() => {
+        return verifyUser({email: user.email, verificationToken: 'wrong token'});
+      })
+      .catch(err => {
+        assert.equal(err.message,'Incorrect token');
+      });
     });
 
   });

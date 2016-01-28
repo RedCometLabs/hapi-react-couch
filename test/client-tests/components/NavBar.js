@@ -1,36 +1,39 @@
-import React from 'react/addons';
-import  NavBar from '../../../client/components/NavBar';
+import React from 'react';
+import { mount, describeWithDOM } from 'enzyme';
+import NavBar from '../../../client/components/NavigationBar';
 import {expect} from 'chai';
 
-const {renderIntoDocument, scryRenderedDOMComponentsWithTag}
-  = React.addons.TestUtils;
-
-
-describe('NavBar', () => {
+describeWithDOM('NavBar', () => {
 
   it('renders the Navbar component correctly when the user is authenticated', () => {
-    const component = renderIntoDocument(
+    const wrapper = mount(
       <NavBar authenticated={true} />
     );
 
-    const links = scryRenderedDOMComponentsWithTag(component, 'li');
+    const links = wrapper.find('li');
     expect(links.length).to.equal(3);
 
-    expect(links[0].getDOMNode().textContent).to.equal('Home');
-    expect(links[1].getDOMNode().textContent).to.equal('Account');
-    expect(links[2].getDOMNode().textContent).to.equal('Logout');
+    const leftLinks = wrapper.instance().getLeftHeaderLinks();
+    const rightLinks = wrapper.instance().getRightHeaderLinks();
+
+    expect(leftLinks[0].key).to.equal('Dashboard');
+
+    expect(rightLinks[0].key).to.equal('Account');
+    expect(rightLinks[1].key).to.equal('Logout');
   });
 
   it('renders the Navbar component correctly when the user is NOT authenticated', () => {
-    const component = renderIntoDocument(
+    const wrapper = mount(
       <NavBar authenticated={false} />
     );
 
-    const links = scryRenderedDOMComponentsWithTag(component, 'li');
-    expect(links.length).to.equal(3);
+    const links = wrapper.find('li');
+    expect(links.length).to.equal(2);
 
-    expect(links[0].getDOMNode().textContent).to.equal('Home');
-    expect(links[1].getDOMNode().textContent).to.equal('Login');
-    expect(links[2].getDOMNode().textContent).to.equal('Register');
+    const leftLinks = wrapper.instance().getLeftHeaderLinks();
+    const rightLinks = wrapper.instance().getRightHeaderLinks();
+
+    expect(rightLinks[0].key).to.equal('Login');
+    expect(rightLinks[1].key).to.equal('SignUp');
   });
 });

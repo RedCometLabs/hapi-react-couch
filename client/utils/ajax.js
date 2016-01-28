@@ -2,19 +2,27 @@
   These functions are used constantly for AJAX requests, thus they have been moved here
   to reduce the amount of boilerplate
 */
-
-import config from '../../config';
-//const baseUrl = 'http://' + config.app.host + ':' + config.app.port + '/';
+import Progress from 'react-progress-2';
 const baseUrl = '/';
 
 export function post(url, body) {
+  Progress.show();
   return request('post', url, body)
    .then(function(response) {
      return response.json();
    });
 }
 
+export function put(url, body) {
+  Progress.show();
+  return request('put', url, body)
+   .then(function(response) {
+     return response.json();
+   });
+}
+
 export function get(url) {
+  Progress.show();
   return request('get', url, null).then((response) => {
     return response.json();
   });
@@ -36,6 +44,7 @@ function request (method, url, body) {
 }
 
 function checkStatus(response) {
+  Progress.hide();
   if (response.status >= 200 && response.status < 300) {
     return response;
   } else {

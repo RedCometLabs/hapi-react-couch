@@ -1,9 +1,9 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import * as actionCreators from '../redux/action-creators/index';
-import NavBar from './NavBar.jsx';
+import NavigationBar from './NavigationBar';
 import notie from 'notie';
-
+import Progress from 'react-progress-2';
 
 export const App = React.createClass({
   componentDidMount: function() {
@@ -23,7 +23,8 @@ export const App = React.createClass({
   render() {
     return (
       <div>
-        <NavBar {...this.props} />
+        <NavigationBar {...this.props} />
+        <Progress.Component/>
         {this.props.children}
       </div>
     );
@@ -33,9 +34,9 @@ export const App = React.createClass({
 /* Reflux connector */
 function mapStateToProps(state) {
   return {
-    authenticated: state.get('authenticated'),
-    error: state.get('error'),
-    info: state.get('info')
+    authenticated: state.auth.get('authenticated'),
+    error: state.notifications.get('error'),
+    info: state.notifications.get('info')
   };
 }
 

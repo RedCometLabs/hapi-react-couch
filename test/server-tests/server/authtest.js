@@ -1,5 +1,6 @@
 import * as helpers from '../server-test-helper';
 import server from '../../../server';
+import {getUser} from '../../../lib/user';
 import { assert } from 'chai';
 
 describe('Auth login', () => {
@@ -69,7 +70,10 @@ describe('Auth sign up', () => {
     const user = {
       name: 'Garren',
       email: 'garren2@newuser.com',
-      password: 'new-password'
+      password: 'new-password',
+      verification: {
+        status: true
+      }
     };
 
     server.inject({
@@ -169,7 +173,7 @@ describe('Updating an account', () => {
     };
 
     server.inject({
-      method: 'POST',
+      method: 'PUT',
       url: '/update-user',
       credentials: user,
       payload: {
@@ -192,7 +196,7 @@ describe('Updating an account', () => {
     };
 
     server.inject({
-      method: 'POST',
+      method: 'PUT',
       url: '/update-user',
       credentials: user,
       payload: {
@@ -214,7 +218,7 @@ describe('Updating an account', () => {
     };
 
     server.inject({
-      method: 'POST',
+      method: 'PUT',
       url: '/update-user',
       credentials: user,
       payload: {
@@ -236,7 +240,7 @@ describe('Updating an account', () => {
     };
 
     server.inject({
-      method: 'POST',
+      method: 'PUT',
       url: '/update-user',
       credentials: user,
       payload: {
@@ -258,7 +262,7 @@ describe('Updating an account', () => {
     };
 
     server.inject({
-      method: 'POST',
+      method: 'PUT',
       url: '/update-user',
       credentials: user,
       payload: {

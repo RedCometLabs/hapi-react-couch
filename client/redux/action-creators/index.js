@@ -1,4 +1,5 @@
-import {post, get} from '../../utils/ajax.js';
+import {post, get, put} from '../../utils/ajax.js';
+import history from '../../utils/history';
 
 export function loginSubmitted(userData) {
   return function(dispatch) {
@@ -6,8 +7,16 @@ export function loginSubmitted(userData) {
     .then(function(data){
       dispatch(userLoggedIn(data));
     })
+    .then(() => {
+      dispatch(hideModals());
+    })
+    .then(() => {
+      history.replaceState(null, '/dashboard'); /* Gonna fix this, Relax :) */
+    })
     .catch(() => {
       dispatch(applicationError('Sorry! Those login details are incorrect.'));
+      dispatch(hideModals());
+      history.replaceState(null, '/login');
     });
   };
 }
@@ -29,7 +38,8 @@ export function forgotPassword(email) {
     post('forgot', email)
     .then(() => {
       dispatch(applicationInfo('Check your emails for details on how to reset your Account'));
-    }).catch(() => {
+    })
+    .catch(() => {
       dispatch(applicationError('An account with that email address does not exist'));
     });
   };
@@ -40,7 +50,14 @@ export function registerUser(userData) {
     post('signup', userData)
     .then(function(data) {
       dispatch(userLoggedIn(data));
-    }).catch(() => {
+    })
+    .then(() => {
+      dispatch(hideModals());
+    })
+    .then(() => {
+      history.replaceState(null, '/dashboard'); /* Gonna fix this, Relax :) */
+    })
+    .catch(() => {
       dispatch(applicationError('Sorry! Your sign up failed'));
     });
   };
@@ -62,7 +79,7 @@ export function logout() {
     get('logout')
       .then(() => {
         dispatch(userLogoutSuceeded());
-        dispatch(applicationInfo('Logout successful'));
+        dispatch(applicationInfo('Thanks for visiting bookEu!'));
       }).catch(() => {
         dispatch(applicationError('Sorry! Logging out failed'));
       });
@@ -71,9 +88,9 @@ export function logout() {
 
 export function updateUserDetails(newUserDetails) {
   return function(dispatch) {
-    post('update-user', newUserDetails)
-    .then(() => {
-      dispatch(userUpdated(newUserDetails));
+    put('update-user', newUserDetails)
+    .then((data) => {
+      dispatch(userUpdated(data));
       dispatch(applicationInfo('Your details have been updated'));
     }).catch(() => {
       dispatch(applicationError('Sorry! We could not update your account details'));
@@ -81,8 +98,36 @@ export function updateUserDetails(newUserDetails) {
   };
 }
 
+export function verifyUser(userDetails) {
+  return function(dispatch) {
+    post('verify-user', userDetails)
+    .then((verifiedAccount) => {
+      dispatch(userLoggedIn(verifiedAccount));
+      dispatch(applicationInfo('Your account has been verified.'));
+    }).catch(() => {
+      dispatch(applicationError('Sorry! We could not verify your account.'));
+    });
+  };
+}
+
+export function showSignUpModal(){
+  return {
+    type: 'SHOW_SIGN_UP_MODAL'
+  };
+}
+
+export function showLoginModal(){
+  return {
+    type: 'SHOW_LOGIN_MODAL'
+  };
+}
 
 
+export function hideModals() {
+  return {
+    type: 'HIDE_MODALS'
+  };
+}
 
 export function clearErrors() {
   return {
@@ -109,14 +154,14 @@ function userLogoutSuceeded() {
   };
 }
 
-function applicationError(error) {
+export function applicationError(error) {
   return {
     type: 'APPLICATION_ERROR',
     data: error
   };
 }
 
-function applicationInfo(info) {
+export function applicationInfo(info) {
   return {
     type: 'APPLICATION_INFO',
     data: info
