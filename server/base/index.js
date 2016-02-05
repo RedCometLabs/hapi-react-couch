@@ -1,5 +1,6 @@
-exports.register = function(server, options, next){
+var config = require('../../config');
 
+exports.register = function(server, options, next){
   server.route({
     method: 'GET',
     path: '/',
@@ -19,7 +20,7 @@ exports.register = function(server, options, next){
         auth: false,
         handler: function (req, reply) {
           console.log('proxying to ', req.url.pathname);
-          reply.proxy({ passThrough: true, host: '127.0.0.1', port: 8080, protocol: 'http' });
+          reply.proxy({ passThrough: true, host: config.app.host , port: 8080, protocol: 'http' });
         }
       }
     });

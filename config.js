@@ -13,7 +13,7 @@ var config = {
   app: {
     port: process.env.PORT || 3000,
     clientport: 8080,
-    host: 'localhost'
+    host: process.env.HOST || 'localhost'
   },
   mandrill: {
     user: process.env.MANDRILL_USER || 'example@gmail.com',

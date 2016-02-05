@@ -3,7 +3,7 @@ var PouchDB = require('pouchdb');
 PouchDB.plugin(require('pouchdb-find'));
 
 const dbname = config.couch.db;
-console.log('con', config.couch.connect);
+console.log('con', config.couch.connect, dbname);
 const db = new PouchDB(config.couch.connect + '/' + dbname);
 
 function createIndex () {
@@ -23,5 +23,8 @@ module.exports = createIndex;
 
 if (require.main === module) {
   console.log('CREATING INDEXES');
-  createIndex();
+  createIndex()
+  .catch(function (err) {
+    console.log('ERR', err);
+  });
 }

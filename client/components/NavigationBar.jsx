@@ -49,7 +49,7 @@ const NavigationBar = React.createClass({
         <Navbar.Header>
           <Navbar.Brand>
             <a href={"#"}>
-              HAPI-COUCH-REACT
+              HAPI-COUCH-123
             </a>
           </Navbar.Brand>
           <Navbar.Toggle />

@@ -1,0 +1,10 @@
+from node:latest
+
+MAINTAINER Garren Smith <garren@redcometlabs.com>
+
+RUN npm install
+RUN npm install nodemon -g
+RUN mkdir /src
+WORKDIR /src
+EXPOSE 3000
+CMD npm run watch-server 

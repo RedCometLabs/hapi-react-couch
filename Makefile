@@ -46,3 +46,7 @@ setupdb:
 
 prod: clean setup less index.html setupdb
 	webpack --colors --debug --progress --config ./webpack.config.prod.js
+
+docker:
+	mkdir ./tmp
+	docker-compose up

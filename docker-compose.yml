@@ -1,0 +1,39 @@
+version: '2'
+services:
+  client:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile.client.dev
+    container_name: client
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./:/src
+  server:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile.server.dev
+    container_name: server
+    ports:
+      - "3000:3000"
+    depends_on:
+      - client
+      - couch
+    links:
+      - "client:client"
+      - "couch:couch"
+    volumes:
+      - ./:/src
+    environment:
+      - NODE_ENV=development
+      - DOCKER_ENV=true
+      - COUCH=http://couch:5984
+      - HOST=192.168.99.100
+  couch:
+    container_name: couch
+    image: klaemo/couchdb:2.0-dev
+    ports:
+      - "5984:5984"
+    command: --with-admin-party --with-haproxy
+    volumes:
+      - "./tmp:/usr/src/couchdb/dev/lib"

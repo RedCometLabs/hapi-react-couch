@@ -22,7 +22,9 @@
     "test": "npm run server-test && npm run client-test",
     "lint": "eslint client",
     "setupdb": "node ./scripts/setupdb.js",
-    "postinstall": "make prod"
+    "postinstall": "make prod",
+    "watch-server": "sleep 20 && npm run setupdb && nodemon -L -w ./server -w ./lib/ -x NODE_ENV=development node server.js",
+    "webpack-docker": "webpack-dev-server --config ./webpack.config.docker-dev.js --host 0.0.0.0"
   },
   "babel": {
     "presets": [
