@@ -74,7 +74,7 @@
     "react-progress-2": "^4.1.1",
     "react-redux": "~4.0.0",
     "react-router": "~1.0.0-rc1",
-    "redux": "~3.0.4",
+    "redux": "~3.5.2",
     "redux-thunk": "~1.0.0",
     "remarkable": "~1.6.0",
     "webpack": "~1.12.3",
