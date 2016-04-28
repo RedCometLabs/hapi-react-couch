@@ -78,7 +78,7 @@
     "redux-thunk": "~1.0.0",
     "remarkable": "~1.6.0",
     "webpack": "~1.12.3",
-    "whatwg-fetch": "~0.11.0"
+    "whatwg-fetch": "~1.0.0"
   },
   "devDependencies": {
     "chai": "~3.4.1",
