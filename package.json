@@ -50,7 +50,7 @@
     "good": "~6.4.0",
     "good-console": "~5.3.0",
     "h2o2": "^5.0.0",
-    "hapi": "~12.1.0",
+    "hapi": "~13.4.1",
     "hapi-auth-cookie": "~3.1.0",
     "highlight.js": "~9.1.0",
     "history": "~1.17.0",
