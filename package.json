@@ -81,7 +81,7 @@
     "whatwg-fetch": "~0.11.0"
   },
   "devDependencies": {
-    "chai": "~3.4.1",
+    "chai": "~3.5.0",
     "chai-immutable": "~1.5.1",
     "enzyme": "^1.4.1",
     "eslint": "~1.10.3",
